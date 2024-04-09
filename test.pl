@@ -49,16 +49,21 @@
 320 is_parent 420.
 
 
-% function that takes a course and returns its prereqs
+% --------------------------------- SETUP CODE -----------------------------------------
 
+
+
+
+
+
+% return_prereqs takes a course and returns its prereqs
 return_prereqs(Course, Prereqs) :-
     findall(Parent, Parent is_parent Course, Prereqs).
 
 
 
-% function that takes a course and list of prerequisites and says true if course can be taken
+% all_prereqs takes a course and list of prerequisites and says true if course can be taken
 % (note: slightly different from return_prereqs because order should not matter!)
-
 all_prereqs(Course, PrereqsList) :-
     findall(Parent, Parent is_parent Course, Parents),
     subset(Parents, PrereqsList),
@@ -73,8 +78,7 @@ subset([Head|Tail], L) :-
 
 
 
-% function that takes in list of courses taken and suggests next course to take
-% (optimize it so that the suggestion satisfies as many future prereqs as possible) -- SOMETHING EXTRA
+
 
 % is_parent_of(A, B) returns true if A is a parent of B
 is_parent_of(P, C) :-
@@ -85,7 +89,20 @@ is_sibling_of(A, B) :-
     is_parent_of(Parent, A),  % Find a common parent of A
     is_parent_of(Parent, B).  % Find the same common parent for B
 
-is_same_depth_as(A,A) :- true.
+
+% Calculate how deep a course is (1 is a course with no prereqs)
+depth_of_course(Course, Depth) :-
+    depth_of_course_helper(Course, 0, Depth).
+
+depth_of_course_helper(Course, Acc, Depth) :-
+    is_parent_of(Parent, Course),
+    NewAcc is Acc + 1,
+    depth_of_course_helper(Parent, NewAcc, Depth).
+depth_of_course_helper(Course, Depth, Depth).
+
+
+is_same_depth_as(A,B) :- 
+    is_sibling_of(A,B).
 is_same_depth_as(A,B) :-
     is_parent_of(X,A),
     is_parent_of(Y,B),
@@ -102,8 +119,13 @@ is_deeper_than(A,B) :-
     is_parent_of(Y,B),
     is_deeper_than(X,Y). % returns true if eventually B reaches minimum depth first
 
-% takes in a list of all taken courses, returns all untaken courses that have previously taken courses as prereqs
+
+
+% find_next_courses takes a list of all taken courses, returns all untaken courses that have previously taken courses as prereqs
 % IMPORTANT !! THIS DOESNT RETURN ALL POSSIBLE COURSES -- 100 WONT BE IN THE LIST FOR EXAMPLE
 find_next_courses(L1, L2) :-
     findall(Prereq, (member(Course, L1), is_parent(Course, Prereq)), NextCourses),
     subtract(NextCourses, L1, L2).
+
+% recommend_most_advanced_coures takes a list of previously taken courses, and returns a list of
+% (or just one) course that has/have the greatest depth out of them
