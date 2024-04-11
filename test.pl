@@ -6,47 +6,47 @@
 :- op(500,xfx,'is_parent').
 
 
-000 is_parent 100.
-000 is_parent 103.
-000 is_parent 110.
-000 is_parent 121.
+000 is_parent cpsc100.
+000 is_parent cpsc103.
+000 is_parent cpsc110.
+000 is_parent cpsc121.
 
-103 is_parent 107.
-103 is_parent 203.
+cpsc103 is_parent cpsc107.
+cpsc103 is_parent cpsc203.
 
-121 is_parent 221. % MAYBE CHANGE THIS CUZ NOT TECHNICALLY TREE
+cpsc121 is_parent cpsc221. % MAYBE CHANGE THIS CUZ NOT TECHNICALLY TREE
 
-110 is_parent 302.
-110 is_parent 303.
-110 is_parent 210.
-110 is_parent 221.
+cpsc110 is_parent cpsc302.
+cpsc110 is_parent cpsc303.
+cpsc110 is_parent cpsc210.
+cpsc110 is_parent cpsc221.
 
-302 is_parent 406.
+cpsc302 is_parent cpsc406.
 
-210 is_parent 319.
-210 is_parent 311.
-210 is_parent 312.
-210 is_parent 330.
+cpsc210 is_parent cpsc319.
+cpsc210 is_parent cpsc311.
+cpsc210 is_parent cpsc312.
+cpsc210 is_parent cpsc330.
 
-221 is_parent 213221.
-221 is_parent 322.
-221 is_parent 320.
-221 is_parent 304.
-221 is_parent 314.
-221 is_parent 340.
-221 is_parent 421.
-221 is_parent 425.
-221 is_parent 427.
+cpsc221 is_parent cpsc213cpsc221.
+cpsc221 is_parent cpsc322.
+cpsc221 is_parent cpsc320.
+cpsc221 is_parent cpsc304.
+cpsc221 is_parent cpsc314.
+cpsc221 is_parent cpsc340.
+cpsc221 is_parent cpsc421.
+cpsc221 is_parent cpsc425.
+cpsc221 is_parent cpsc427.
 
-213221 is_parent 404.
-213221 is_parent 310.
-213221 is_parent 313.
-213221 is_parent 317.
+cpsc213cpsc221 is_parent cpsc404.
+cpsc213cpsc221 is_parent cpsc310.
+cpsc213cpsc221 is_parent cpsc313.
+cpsc213cpsc221 is_parent cpsc317.
 
-310 is_parent 410.
+cpsc310 is_parent cpsc410.
 
-322 is_parent 422.
-320 is_parent 420.
+cpsc322 is_parent cpsc422.
+cpsc320 is_parent cpsc420.
 
 
 % --------------------------------- SETUP CODE -----------------------------------------
@@ -122,10 +122,10 @@ is_deeper_than(A,B) :-
 
 
 % find_next_courses takes a list of all taken courses, returns all untaken courses that have previously taken courses as prereqs
-% IMPORTANT !! THIS DOESNT RETURN ALL POSSIBLE COURSES -- 100 WONT BE IN THE LIST FOR EXAMPLE
+% IMPORTANT !! THIS DOESNT RETURN ALL POSSIBLE COURSES -- cpsc100 WONT BE IN THE LIST FOR EXAMPLE
 find_next_courses(L1, L2) :-
     findall(Prereq, (member(Course, L1), is_parent(Course, Prereq)), NextCourses),
     subtract(NextCourses, L1, L2).
 
-% recommend_most_advanced_coures takes a list of previously taken courses, and returns a list of
+% recommend_most_advanced_courses takes a list of previously taken courses, and returns a list of
 % (or just one) course that has/have the greatest depth out of them
